@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <!-- Mettez ici les balises head nécessaires, comme les feuilles de style CSS ou les scripts JavaScript -->
+</h:head>
+<h:body>
+     <h:form id="form">
+    <p:dataGrid var="categorie" value="#{categoriebean.getCategories()}" columns="3" layout="grid"
+        rows="12" paginator="true" id="categories"
+        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+        rowsPerPageTemplate="6,12,16">
+         
+        <f:facet name="header">
+            Cars for Sale
+        </f:facet>
+ 
+        <p:panel header="#{categorie.id}" style="text-align:center">
+            <h:panelGrid columns="1" style="width:100%">
+                <p:link id="idCategorie" outcome="article.xhtml" target="_blank">
+                	<p:graphicImage name="images_categories/#{categorie.photos}"/> 
+                </p:link>
+ 
+                <h:outputText value="#{categorie.nom}" />
+ 
+                <p:commandLink update=":form:categorieDetail" oncomplete="PF('categorieDialog').show()" title="View Detail">
+                    <h:outputText styleClass="pi pi-search" style="margin:0 auto;"/>
+                    <f:setPropertyActionListener value="#{categorie}" target="#{categoriebean.selectedCategorie}" />
+                </p:commandLink>
+            </h:panelGrid>
+        </p:panel>
+ 
+    </p:dataGrid>
+ 
+    <p:dialog header="Categorie Info" widgetVar="categorieDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+        <p:outputPanel id="categorieDetail" style="text-align:center;">
+            <p:panelGrid  columns="2" rendered="#{categoriebean.selectedCategorie ne null}" columnClasses="label,value">
+                <f:facet name="header">
+                    <p:graphicImage name="images_categories/#{categoriebean.selectedCategorie.photos}"/> 
+                </f:facet>
+                 
+                <h:outputText value="Id:" />
+                <h:outputText value="#{categoriebean.selectedCategorie.id}" />
+ 
+                <h:outputText value="Nom" />
+                <h:outputText value="#{categoriebean.selectedCategorie.nom}" />
+ 
+                <h:outputText value="Remise:" />
+                <h:outputText value="#{categoriebean.selectedCategorie.remise}" style="color:#{dataGridView.selectedCar.color}"/>
+             
+                <h:outputText value="isRemiseCumulable" />
+                <h:outputText value="$#{categoriebean.selectedCategorie.isRemiseCumulable}" />
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>
+</h:form>
+
+</h:body>
+</html>
